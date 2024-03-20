@@ -5,13 +5,11 @@ using System.Text.Json.Serialization;
 
 public class Vector
 {
-    [JsonPropertyName("coordinates")] // Match the JSON property name
-    private double[] coordinates;
+    [JsonPropertyName("coordinates")] private double[] coordinates;
 
     public Vector()
     {
-        // Parameterless constructor for JSON deserialization
-        this.coordinates = new double[0]; // Initialize coordinates array
+        this.coordinates = new double[0];
     }
 
     public Vector(double[] coordinates)
@@ -34,25 +32,20 @@ public class Vector
         Array.Resize(ref coordinates, coordinates.Length - reducedDimensions);
     }
     
-    public static Vector Sum(Vector vector1, Vector vector2)
+    public Vector Sum(Vector vector1)
     {
-        if (vector1.coordinates.Length != vector2.coordinates.Length)
-        {
-            throw new ArgumentException("Вектори повинні мати однакову кількість розмірностей для виконання додавання.");
-        }
-
         double[] result = new double[vector1.coordinates.Length];
         for (int i = 0; i < vector1.coordinates.Length; i++)
         {
-            result[i] = vector1.coordinates[i] + vector2.coordinates[i];
+            result[i] = vector1.coordinates[i] + coordinates[i];
         }
 
         return new Vector(result);
     }
     
-    public static Vector Multiply(Vector vector1, Vector vector2)
+    public Vector Multiply(Vector vector1)
     {
-        if (vector1.coordinates.Length != vector2.coordinates.Length)
+        if (vector1.coordinates.Length != coordinates.Length)
         {
             throw new ArgumentException("Вектори повинні мати однакову кількість розмірностей для виконання множення.");
         }
@@ -60,15 +53,15 @@ public class Vector
         double[] result = new double[vector1.coordinates.Length];
         for (int i = 0; i < vector1.coordinates.Length; i++)
         {
-            result[i] = vector1.coordinates[i] * vector2.coordinates[i];
+            result[i] = vector1.coordinates[i] * coordinates[i];
         }
 
         return new Vector(result);
     }
     
-    public static Vector Difference(Vector vector1, Vector vector2)
+    public Vector Difference(Vector vector1)
     {
-        if (vector1.coordinates.Length != vector2.coordinates.Length)
+        if (vector1.coordinates.Length != coordinates.Length)
         {
             throw new ArgumentException("Вектори повинні мати однакову кількість розмірностей для обчислення різниці.");
         }
@@ -76,7 +69,7 @@ public class Vector
         double[] result = new double[vector1.coordinates.Length];
         for (int i = 0; i < vector1.coordinates.Length; i++)
         {
-            result[i] = vector1.coordinates[i] - vector2.coordinates[i];
+            result[i] = vector1.coordinates[i] - coordinates[i];
         }
 
         return new Vector(result);
@@ -158,12 +151,10 @@ class Program
         vector2.Print();
 
         Console.WriteLine("Сума векторiв:");
-        Vector sum = Vector.Sum(vector1, vector2);
-        sum.Print();
+        vector1.Sum(vector2).Print();
 
         Console.WriteLine("Рiзниця векторiв:");
-        Vector difference = Vector.Difference(vector1, vector2);
-        difference.Print();
+        vector1.Difference(vector2).Print();
 
         Console.WriteLine("Довжина вектора 1: " + vector1.Magnitude());
         Console.WriteLine("Довжина вектора 2: " + vector2.Magnitude());
